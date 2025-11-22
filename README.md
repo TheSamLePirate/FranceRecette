@@ -2,6 +2,8 @@
 
 Une application interactive pour découvrir les spécialités culinaires des départements français.
 
+🔗 **Démo en ligne** : [https://sam-le-gourmand.puter.site/](https://sam-le-gourmand.puter.site/)
+
 ![Aperçu de l'application](https://via.placeholder.com/800x400?text=Aper%C3%A7u+de+l%27application)
 
 ## Fonctionnalités
