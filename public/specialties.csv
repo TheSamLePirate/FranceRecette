@@ -1,0 +1,97 @@
+code,nom,specialite
+01,Ain,Poulet de Bresse
+02,Aisne,Ficelle picarde
+03,Allier,Pâté aux pommes de terre
+04,Alpes-de-Haute-Provence,Agneau de Sisteron
+05,Hautes-Alpes,Tourtons
+06,Alpes-Maritimes,Socca
+07,Ardèche,Crème de marrons
+08,Ardennes,Salade au lard
+09,Ariège,Azinat
+10,Aube,Andouillette de Troyes
+11,Aude,Cassoulet
+12,Aveyron,Aligot
+13,Bouches-du-Rhône,Bouillabaisse
+14,Calvados,Tripes à la mode de Caen
+15,Cantal,Pounti
+16,Charente,Cognac
+17,Charente-Maritime,Huîtres Marennes-Oléron
+18,Cher,Pâté berrichon
+19,Corrèze,Mique
+2A,Corse-du-Sud,Prisuttu
+2B,Haute-Corse,Fiadone
+21,Côte-d'Or,Bœuf bourguignon
+22,Côtes-d'Armor,Coquilles Saint-Jacques
+23,Creuse,Gâteau creusois
+24,Dordogne,Foie gras
+25,Doubs,Comté
+26,Drôme,Nougat de Montélimar
+27,Eure,Tarte aux pommes
+28,Eure-et-Loir,Pâté de Chartres
+29,Finistère,Kouign-amann
+30,Gard,Brandade de morue
+31,Haute-Garonne,Saucisse de Toulouse
+32,Gers,Poulet fermier
+33,Gironde,Canelés
+34,Hérault,Tielle sétoise
+35,Ille-et-Vilaine,Galette-saucisse
+36,Indre,Pâté de Pâques
+37,Indre-et-Loire,Rillons
+38,Isère,Gratin dauphinois
+39,Jura,Vin jaune
+40,Landes,Salade landaise
+41,Loir-et-Cher,Tarte Tatin
+42,Loire,Râpée
+43,Haute-Loire,Lentilles vertes du Puy
+44,Loire-Atlantique,Gâteau nantais
+45,Loiret,Pralines de Montargis
+46,Lot,Truffe noire
+47,Lot-et-Garonne,Pruneaux d'Agen
+48,Lozère,Aligot
+49,Maine-et-Loire,Crémet d'Anjou
+50,Manche,Omelette de la mère Poulard
+51,Marne,Champagne
+52,Haute-Marne,Langres
+53,Mayenne,Port-Salut
+54,Meurthe-et-Moselle,Quiche lorraine
+55,Meuse,Madeleines de Commercy
+56,Morbihan,Andouille de Guémené
+57,Moselle,Tarte à la mirabelle
+58,Nièvre,Négus
+59,Nord,Welsh
+60,Oise,Crème chantilly
+61,Orne,Camembert
+62,Pas-de-Calais,Carbonade flamande
+63,Puy-de-Dôme,Potée auvergnate
+64,Pyrénées-Atlantiques,Gâteau basque
+65,Hautes-Pyrénées,Gâteau à la broche
+66,Pyrénées-Orientales,Rousquille
+67,Bas-Rhin,Choucroute
+68,Haut-Rhin,Kougelhopf
+69,Rhône,Rosette de Lyon
+70,Haute-Saône,Cancoillotte
+71,Saône-et-Loire,Escargots de Bourgogne
+72,Sarthe,Rillettes du Mans
+73,Savoie,Fondue savoyarde
+74,Haute-Savoie,Tartiflette
+75,Paris,Baguette
+76,Seine-Maritime,Canard au sang
+77,Seine-et-Marne,Brie de Meaux
+78,Yvelines,Paris-Brest
+79,Deux-Sèvres,Tourteau fromager
+80,Somme,Gâteau battu
+81,Tarn,Ail rose de Lautrec
+82,Tarn-et-Garonne,Chasselas de Moissac
+83,Var,Tarte tropézienne
+84,Vaucluse,Fruits confits d'Apt
+85,Vendée,Préfou
+86,Vienne,Broyé du Poitou
+87,Haute-Vienne,Clafoutis
+88,Vosges,Bonbons des Vosges
+89,Yonne,Gougères
+90,Territoire de Belfort,Belflore
+91,Essonne,Cresson de Méréville
+92,Hauts-de-Seine,Clamart (petits pois)
+93,Seine-Saint-Denis,Brioche de Nanterre
+94,Val-de-Marne,Belle de Fontenay
+95,Val-d'Oise,Cerises de Montmorency
