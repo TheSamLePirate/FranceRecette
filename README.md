@@ -12,6 +12,7 @@ Une application interactive pour découvrir les spécialités culinaires des dé
   - Les départements cliqués s'affichent en **Rouge**.
   - Les départements non visités restent en **Vert**.
 - **Données** : Les spécialités sont chargées dynamiquement à partir d'un fichier CSV.
+  > **Note** : Les données de spécialités dans le fichier CSV sont actuellement générées par une IA et peuvent nécessiter des corrections.
 
 ## Technologies Utilisées
 
@@ -44,7 +45,34 @@ Pour faire fonctionner cette application, vous avez besoin de **Node.js** instal
 
 Pour vérifier que l'installation a réussi, ouvrez un terminal (ou Invite de commandes sur Windows) et tapez `node -v`. Vous devriez voir un numéro de version s'afficher.
 
-### 2. Modifier les Spécialités Culinaires
+### 2. Télécharger et Lancer l'Application
+
+Une fois Node.js installé :
+
+1.  **Télécharger le code** :
+    -   Cliquez sur ce lien pour télécharger le projet : [Télécharger le ZIP](https://github.com/TheSamLePirate/FranceRecette/archive/refs/heads/main.zip).
+    -   Décompressez le fichier ZIP (clic droit > Extraire tout ou double-clic).
+
+2.  **Ouvrir le Terminal** :
+    -   **Windows** : Cherchez "PowerShell" ou "Invite de commandes" dans le menu Démarrer.
+    -   **macOS** : Cherchez "Terminal" avec Spotlight (Cmd + Espace).
+
+3.  **Aller dans le dossier du projet** :
+    Tapez `cd` suivi d'un espace, puis glissez-déposez le dossier décompressé (`FranceRecette-main`) dans la fenêtre du terminal. Cela écrira le chemin automatiquement.
+    Appuyez sur **Entrée**.
+    *(Exemple : `cd /Users/moi/Downloads/FranceRecette-main`)*
+
+4.  **Installer et Lancer** :
+    Tapez les commandes suivantes (appuyez sur Entrée après chaque ligne) :
+    ```bash
+    npm install
+    npm run dev
+    ```
+
+5.  **Ouvrir l'application** :
+    Une fois que le terminal affiche une adresse comme `http://localhost:5173/`, ouvrez votre navigateur web et allez à cette adresse.
+
+### 3. Modifier les Spécialités Culinaires
 
 Vous pouvez changer les plats affichés sur la carte sans toucher au code !
 
@@ -52,18 +80,19 @@ Vous pouvez changer les plats affichés sur la carte sans toucher au code !
 2.  Ouvrez le fichier `specialties.csv`.
 3.  Vous pouvez l'ouvrir avec :
     -   Un éditeur de texte (Bloc-notes, TextEdit, VS Code).
-    -   Excel ou Google Sheets (assurez-vous de sauvegarder/exporter au format **CSV**).
+    -   Excel ou Google Sheets.
 
-**Format du fichier :**
-Le fichier contient une liste de départements et leurs plats, séparés par des virgules.
-Exemple :
+**⚠️ IMPORTANT : Format du fichier**
+Assurez-vous que le fichier reste au format **CSV** (séparé par des virgules). Si vous utilisez Excel, faites "Enregistrer sous" et choisissez "CSV (séparateur: point-virgule ou virgule)".
+
+Le fichier doit ressembler à ceci :
 ```csv
 code,department,specialty
 01,Ain,Poulet de Bresse
 02,Aisne,Ficelle Picarde
 ...
 ```
-Pour changer une spécialité, remplacez simplement le texte après la virgule.
+Pour changer une spécialité, remplacez simplement le texte après la dernière virgule de la ligne correspondante.
 
 ## Installation et Démarrage
 
