@@ -124,3 +124,7 @@ Pour changer une spécialité, remplacez simplement le texte après la dernière
 ## Auteur
 
 Créé avec ❤️ par SamLePirate
+
+## Licence
+
+Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
