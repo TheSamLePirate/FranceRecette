@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState, useCallback } from 'react';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import type { LatLngExpression } from 'leaflet';
-import Papa from 'papaparse';
+import type { LatLngExpression, Layer } from 'leaflet';
+import { useFranceData } from '../hooks/useFranceData';
 
 // Fix for default marker icon in Leaflet with Webpack/Vite
 import L from 'leaflet';
@@ -18,12 +18,6 @@ let DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
-interface Specialty {
-  code: string;
-  nom: string;
-  specialite: string;
-}
-
 interface SelectedDept {
   code: string;
   nom: string;
@@ -31,37 +25,12 @@ interface SelectedDept {
 }
 
 const FranceMap = () => {
-  const [geoJsonData, setGeoJsonData] = useState(null);
-  const [specialties, setSpecialties] = useState<Record<string, string>>({});
+  const { geoJsonData, specialties, loading, error } = useFranceData();
   const [clickedDepartments, setClickedDepartments] = useState<Set<string>>(new Set());
   const [selectedDepartment, setSelectedDepartment] = useState<SelectedDept | null>(null);
   const [isSpecialtyRevealed, setIsSpecialtyRevealed] = useState(false);
 
-  useEffect(() => {
-    // Fetch GeoJSON
-    fetch('https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/departements-version-simplifiee.geojson')
-      .then(response => response.json())
-      .then(data => setGeoJsonData(data))
-      .catch(error => console.error('Error loading GeoJSON:', error));
-
-    // Fetch and parse CSV
-    Papa.parse<Specialty>('/specialties.csv', {
-      download: true,
-      header: true,
-      complete: (results: Papa.ParseResult<Specialty>) => {
-        const specialtyMap: Record<string, string> = {};
-        results.data.forEach((item: Specialty) => {
-          if (item.code && item.specialite) {
-            specialtyMap[item.code] = item.specialite;
-          }
-        });
-        setSpecialties(specialtyMap);
-      },
-      error: (error: Error) => console.error('Error loading CSV:', error)
-    });
-  }, []);
-
-  const mapStyle = (feature: any) => {
+  const mapStyle = useCallback((feature: any) => {
     const code = feature.properties.code;
     const isClicked = clickedDepartments.has(code);
     
@@ -76,9 +45,9 @@ const FranceMap = () => {
       dashArray: '3',
       fillOpacity: 0.7
     };
-  };
+  }, [clickedDepartments]);
 
-  const onEachFeature = (feature: any, layer: L.Layer) => {
+  const onEachFeature = useCallback((feature: any, layer: Layer) => {
     layer.on({
       click: () => {
         const code = feature.properties.code;
@@ -86,7 +55,11 @@ const FranceMap = () => {
         const specialty = specialties[code] || 'Spécialité non trouvée';
         
         // Update clicked state
-        setClickedDepartments(prev => new Set(prev).add(code));
+        setClickedDepartments(prev => {
+            const newSet = new Set(prev);
+            newSet.add(code);
+            return newSet;
+        });
         
         // Reset revealed state
         setIsSpecialtyRevealed(false);
@@ -113,9 +86,12 @@ const FranceMap = () => {
         });
       }
     });
-  };
+  }, [specialties]);
 
   const position: LatLngExpression = [46.603354, 1.888334]; // Center of France
+
+  if (loading) return <div className="flex justify-center items-center h-[600px]">Chargement de la carte...</div>;
+  if (error) return <div className="flex justify-center items-center h-[600px] text-red-500">Erreur: {error}</div>;
 
   return (
     <div className="relative h-[600px] w-full rounded-lg overflow-hidden shadow-lg border border-gray-200">
