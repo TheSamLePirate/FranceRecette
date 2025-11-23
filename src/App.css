@@ -1,1 +1,19 @@
-/* App.css is now empty as we use Tailwind CSS classes directly in components */
+/* Simple styles for department labels using DivIcon */
+.department-label-marker {
+  background: none !important;
+  border: none !important;
+}
+
+.department-label-text {
+  font-weight: 700;
+  font-size: 12px;
+  color: #1f2937;
+  text-shadow: 
+    -1px -1px 0 #fff,  
+     1px -1px 0 #fff,
+    -1px  1px 0 #fff,
+     1px  1px 0 #fff,
+     0px  2px 4px rgba(0,0,0,0.4);
+  white-space: nowrap;
+  pointer-events: none;
+}

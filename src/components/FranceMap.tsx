@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
+import { MapContainer, TileLayer, GeoJSON, useMap, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import type { LatLngExpression, Layer } from 'leaflet';
 import { useFranceData } from '../hooks/useFranceData';
@@ -24,11 +24,48 @@ interface SelectedDept {
   specialite: string;
 }
 
+interface MapPosition {
+  center: LatLngExpression;
+  zoom: number;
+  name: string;
+}
+
+// Predefined map positions for different territories
+const MAP_POSITIONS: Record<string, MapPosition> = {
+  france: { center: [46.603354, 1.888334], zoom: 6, name: 'France métropolitaine' },
+  paris: { center: [48.8566, 2.3522], zoom: 9, name: 'Île-de-France' },
+  guadeloupe: { center: [16.265, -61.551], zoom: 9, name: 'Guadeloupe' },
+  martinique: { center: [14.641, -61.024], zoom: 10, name: 'Martinique' },
+  guyane: { center: [3.933, -53.125], zoom: 7, name: 'Guyane' },
+  reunion: { center: [-21.115, 55.536], zoom: 9, name: 'La Réunion' },
+  mayotte: { center: [-12.827, 45.166], zoom: 10, name: 'Mayotte' },
+};
+
+// Component to control map position
+const MapController = ({ position }: { position: MapPosition }) => {
+  const map = useMap();
+  
+  const handleFlyTo = () => {
+    map.flyTo(position.center, position.zoom, {
+      duration: 1.5
+    });
+  };
+
+  // Call flyTo when position changes
+  if (map) {
+    handleFlyTo();
+  }
+
+  return null;
+};
+
 const FranceMap = () => {
   const { geoJsonData, specialties, loading, error } = useFranceData();
   const [clickedDepartments, setClickedDepartments] = useState<Set<string>>(new Set());
   const [selectedDepartment, setSelectedDepartment] = useState<SelectedDept | null>(null);
   const [isSpecialtyRevealed, setIsSpecialtyRevealed] = useState(false);
+  const [currentPosition, setCurrentPosition] = useState<MapPosition>(MAP_POSITIONS.france);
+  const [territoryLabels, setTerritoryLabels] = useState<Array<{code: string, label: string, position: [number, number]}>>([]);
 
   const mapStyle = useCallback((feature: any) => {
     const code = feature.properties.code;
@@ -41,17 +78,35 @@ const FranceMap = () => {
       fillColor: color,
       weight: 1,
       opacity: 1,
-      color: 'white',
-      dashArray: '3',
+      color: '#000000',
+      dashArray: '0',
       fillOpacity: 0.7
     };
   }, [clickedDepartments]);
 
   const onEachFeature = useCallback((feature: any, layer: Layer) => {
+    const code = feature.properties.code;
+    const nom = feature.properties.nom;
+    
+    // Determine if it's a DOM-TOM (codes >= 971) or metropolitan department
+    const isDomTom = parseInt(code) >= 971;
+    
+    // Create label: show code for departments, name for DOM-TOM
+    const label = isDomTom ? nom : code;
+    
+    // Calculate centroid of the polygon
+    const bounds = (layer as any).getBounds();
+    const centroid = bounds.getCenter();
+    
+    // Store label info for rendering as markers
+    setTerritoryLabels(prev => [...prev, {
+      code,
+      label,
+      position: [centroid.lat, centroid.lng]
+    }]);
+    
     layer.on({
       click: () => {
-        const code = feature.properties.code;
-        const nom = feature.properties.nom;
         const specialty = specialties[code] || 'Spécialité non trouvée';
         
         // Update clicked state
@@ -71,8 +126,8 @@ const FranceMap = () => {
         const layer = e.target;
         layer.setStyle({
           weight: 2,
-          color: '#666',
-          dashArray: '',
+          color: '#000000',
+          dashArray: '0',
           fillOpacity: 0.9
         });
       },
@@ -80,26 +135,42 @@ const FranceMap = () => {
         const layer = e.target;
         layer.setStyle({
           weight: 1,
-          color: 'white',
-          dashArray: '3',
+          color: '#000000',
+          dashArray: '0',
           fillOpacity: 0.7
         });
       }
     });
   }, [specialties]);
 
-  const position: LatLngExpression = [46.603354, 1.888334]; // Center of France
-
   if (loading) return <div className="flex justify-center items-center h-[600px]">Chargement de la carte...</div>;
   if (error) return <div className="flex justify-center items-center h-[600px] text-red-500">Erreur: {error}</div>;
 
   return (
     <div className="relative h-[600px] w-full rounded-lg overflow-hidden shadow-lg border border-gray-200">
-      <MapContainer center={position} zoom={6} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}>
+      {/* Navigation Buttons */}
+      <div className="absolute bottom-4 left-4 z-[1000] flex flex-wrap gap-2 max-w-xs">
+        {Object.entries(MAP_POSITIONS).map(([key, pos]) => (
+          <button
+            key={key}
+            onClick={() => setCurrentPosition(pos)}
+            className={`px-3 py-1.5 text-sm font-medium rounded-lg shadow-md transition-all duration-200 ${
+              currentPosition.name === pos.name
+                ? 'bg-blue-600 text-white'
+                : 'bg-white/90 text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+            }`}
+          >
+            {pos.name}
+          </button>
+        ))}
+      </div>
+
+      <MapContainer center={currentPosition.center} zoom={currentPosition.zoom} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png"
         />
+        <MapController position={currentPosition} />
         {geoJsonData && (
           <GeoJSON 
             // Key ensures re-render when clickedDepartments changes to update colors
@@ -109,6 +180,25 @@ const FranceMap = () => {
             onEachFeature={onEachFeature}
           />
         )}
+        
+        {/* Render labels as DivIcon markers */}
+        {territoryLabels.map((territory) => {
+          const icon = L.divIcon({
+            className: 'department-label-marker',
+            html: `<span class="department-label-text">${territory.label}</span>`,
+            iconSize: [0, 0],
+            iconAnchor: [0, 0]
+          });
+          
+          return (
+            <Marker 
+              key={territory.code}
+              position={territory.position}
+              icon={icon}
+              interactive={false}
+            />
+          );
+        })}
       </MapContainer>
 
       {/* Specialty Card Overlay */}
